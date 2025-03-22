@@ -1,0 +1,106 @@
+import java.awt.*;
+import java.awt.event.*;
+import java.util.ArrayList;
+import java.util.Random;
+import javax.swing.*;
+
+
+public class GamePanel extends JPanel implements ActionListener,KeyListener {
+	int width=360;
+	int height=640;
+	//Images
+	Image backgroundImg;
+	Image topPipe;
+	Image bottomPipe;
+	Image flappyBird;
+	
+	//Bird
+	int birdX=width/8;
+	int birdY=height/2;
+	int birdwidth=34;
+	int birdheight=24;
+	class Bird{
+		int x=birdX;
+		int y=birdY;
+		int width=birdwidth;
+		int height=birdheight;
+		Image img;
+		Bird(Image img){
+			this.img=img;
+		}
+		
+	}
+	int pipeX=width;
+	int pipeY=0;
+	int pipeWidth=64;
+	int pipeHeight=512;
+	
+	
+	
+	Bird bird;
+	int velocityY=0;
+	int gravity=1;
+	
+	Timer gameloop;
+	
+	GamePanel(){
+		
+		setFocusable(true);
+		addKeyListener(this);
+		setPreferredSize(new Dimension(width,height));
+		setBackground(Color.BLUE);
+		backgroundImg=new ImageIcon(getClass().getResource("flappybirdbg.png")).getImage();
+		flappyBird=new ImageIcon(getClass().getResource("flappybird.png")).getImage();
+		bottomPipe=new ImageIcon(getClass().getResource("bottompipe.png")).getImage();
+		topPipe=new ImageIcon(getClass().getResource("toppipe.png")).getImage();
+		
+		bird=new Bird(flappyBird);
+		
+		gameloop=new Timer(1000/60,this);
+		gameloop.start();
+	}
+	
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		draw(g);
+	}
+	
+	public void draw(Graphics g) {
+		g.drawImage(backgroundImg,0,0,width,height,null);
+		
+		g.drawImage(bird.img,bird.x,bird.y,bird.width,bird.height,null);
+	}
+	public void move() {
+		velocityY+=gravity;
+		bird.y+=velocityY;
+		bird.y=Math.max(bird.y,0);  
+	}
+	
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+		move();
+		repaint();
+		
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		if(e.getKeyCode()==KeyEvent.VK_SPACE) {
+			velocityY=-9;
+		}
+		
+	}
+
+	@Override
+	public void keyReleased(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void keyTyped(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+}
